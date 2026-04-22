@@ -29,14 +29,15 @@ const insertScrapedData = async (data) => {
         // Note: Assumes `slug` is a Primary Key or UNIQUE constraint in dbt_dsarkar.shopify_pricing.
         // If it isn't, standard INSERT is used without ON CONFLICT.
         const query = `
-            INSERT INTO dbt_dsarkar.shopify_pricing (slug, product_name, selling_price, mrp, in_stock, product_id)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO dbt_dsarkar.shopify_pricing (slug, product_name, selling_price, mrp, in_stock, product_id, scraped_at)
+            VALUES ($1, $2, $3, $4, $5, $6, NOW())
             ON CONFLICT (slug) DO UPDATE SET
                 product_name = EXCLUDED.product_name,
                 selling_price = EXCLUDED.selling_price,
                 mrp = EXCLUDED.mrp,
                 in_stock = EXCLUDED.in_stock,
-                product_id = EXCLUDED.product_id
+                product_id = EXCLUDED.product_id,
+                scraped_at = EXCLUDED.scraped_at
         `;
         const values = [
             data.slug, 
@@ -51,8 +52,8 @@ const insertScrapedData = async (data) => {
         if (err.code === '42P10' || err.code === '42601' || err.message.includes('constraint') || err.message.includes('ON CONFLICT')) {
             // Backup Insert if ON CONFLICT logic fails due to lack of constraints
             const fallbackQuery = `
-                INSERT INTO dbt_dsarkar.shopify_pricing (slug, product_name, selling_price, mrp, in_stock, product_id)
-                VALUES ($1, $2, $3, $4, $5, $6)
+                INSERT INTO dbt_dsarkar.shopify_pricing (slug, product_name, selling_price, mrp, in_stock, product_id, scraped_at)
+                VALUES ($1, $2, $3, $4, $5, $6, NOW())
             `;
             await client.query(fallbackQuery, [
                 data.slug, 
