@@ -1,4 +1,7 @@
-require('dotenv').config();
+require('dotenv').config({
+    path: '/home/ubuntu/project/shopify_price_tracker/.env',
+    override: true
+});
 const puppeteer = require('puppeteer');
 const { Pool } = require('pg');
 
