@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "postinstall": "npx puppeteer browsers install chrome"
+  },
   "dependencies": {
     "csv-parser": "^3.2.0",
     "dotenv": "^17.4.2",
