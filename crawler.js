@@ -127,7 +127,9 @@ const scrapeProduct = async (browser, slug) => {
         return;
     }
 
+    const chromium = require('chromium');
     const browser = await puppeteer.launch({ 
+        executablePath: chromium.path,
         headless: 'new', 
         args: ['--no-sandbox', '--disable-setuid-sandbox'] 
     });

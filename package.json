@@ -3,6 +3,7 @@
     "postinstall": "npx puppeteer browsers install chrome"
   },
   "dependencies": {
+    "chromium": "^3.0.3",
     "csv-parser": "^3.2.0",
     "dotenv": "^17.4.2",
     "pg": "^8.20.0",
